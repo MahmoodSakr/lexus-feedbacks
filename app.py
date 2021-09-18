@@ -17,7 +17,7 @@ else:
     # setup the production configuration for the deployment server like heroku
     app.debug = False
     # production db url
-    app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://yyaebbsekdtvmv:5f6d6b474b9bfe108f0efe39c27442e485b95c0d153292558d2807cae63cbef2@ec2-34-228-154-153.compute-1.amazonaws.com:5432/d40duk0nb1e0lp"
+    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://yyaebbsekdtvmv:5f6d6b474b9bfe108f0efe39c27442e485b95c0d153292558d2807cae63cbef2@ec2-34-228-154-153.compute-1.amazonaws.com:5432/d40duk0nb1e0lp"
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
