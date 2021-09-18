@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <title>Thank You!</title>
+  </head>
+  <body>
+    <div class="container">
+      <img src="../static/images/logo.png" class="logo" alt="sakration" />
+      {% if message1%}
+      <h1 style="margin:20px auto;text-align:center;color:blue">{{message1}}</h1>
+      <h2 style="text-align:center ; color:darkgreen">{{message2}}</h2>
+      {% endif %}
+      {% if not message1 %}
+      <h1> Please enter your feedback firstly from the homepage then submit it</h1>
+      {% endif %}
+    </div>
+  </body>
+</html>
