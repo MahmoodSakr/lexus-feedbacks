@@ -31,7 +31,7 @@ class Feedback_Table_Model(db.Model):
     """
     __tablename__ = 'feedbackTable'
     id = db.Column(db.Integer, primary_key=True)
-    customer = db.Column(db.String(200), unique=True)
+    customer = db.Column(db.String(200))
     dealer = db.Column(db.String(200))
     rating = db.Column(db.Integer)
     comments = db.Column(db.Text())  # Text hold data more than String
@@ -44,7 +44,6 @@ class Feedback_Table_Model(db.Model):
         self.dealer = dealer
         self.rating = rating
         self.comments = comments
-
 
 @app.route("/", methods=['get'])
 def index():
