@@ -5,6 +5,7 @@ app = Flask(__name__)  # app instance of the Flask
 
 # this var will play as a flag to switch between the development or production environment
 # ENV = 'dev'
+
 ENV = 'production'
 
 # setup the development configuration
@@ -23,13 +24,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #Integrate SQLAlchemy layer with the Flask app to control your db with it
 db = SQLAlchemy(app)
+""" 
+db = SQLAlchemy()
+db.init_app(app)
+"""
 
-# create the db model through an oop class to define the schema of your table
-class Feedback_Table_Model(db.Model):
+# create the db model through an oop class to define the schema of your feedbacks table
+
+class Feedback(db.Model):
     """sumary_line
     define your table name and the columns details (type,constrains), and there values will be added by the constrctor when an object of this class is instantiated
     """
-    __tablename__ = 'feedbackTable'
+    __tablename__ = 'feedback'
     id = db.Column(db.Integer, primary_key=True)
     customer = db.Column(db.String(200))
     dealer = db.Column(db.String(200))
@@ -64,9 +70,9 @@ def submit():
             # the message is sent as template parameter to the index page and you should access
             # its values by {{message}} or {{message|safe}} for the security means
         # check for if the customer is exist on the db
-        if db.session.query(Feedback_Table_Model).filter(Feedback_Table_Model.customer == customerName).count() == 0:
+        if db.session.query(Feedback).filter(Feedback.customer == customerName).count() == 0:
             # the customer is not existed in the database, so we will add its details as new customer row
-            newCustomer = Feedback_Table_Model(customerName, dealerName, rating, comments)
+            newCustomer = Feedback(customerName, dealerName, rating, comments)
             db.session.add(newCustomer)
             db.session.commit()
             # send email with the feedback
