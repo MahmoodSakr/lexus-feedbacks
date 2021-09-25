@@ -5,8 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Please Rate your service</title>
-    <link rel="shortcut icon" href="" type="image/x-icon">
-    <link rel="stylesheet" href="../static/css/style.css" />
+
+    <link
+      rel="stylesheet"
+      href="{{url_for('static',filename='css/style.css')}}"
+    />
+    <link
+    rel="shortcut icon"
+    href="{{url_for('static',filename='images/logo.png')}}"
+    type="image/x-icon"
+  />
   </head>
   <body>
     <div class="container">
@@ -28,7 +36,7 @@
         <div class="form-group">
           <h3>Dealer</h3>
           <select name="dealer">
-              <!-- the value="" will be used in the validation for the non selected options-->
+            <!-- the value="" will be used in the validation for the non selected options-->
             <option value="">Select Dealer</option>
             <option value="Mohamed Fouad">Mohamed Fouad</option>
             <option value="Farouk Sakr">Farouk Sakr</option>
@@ -60,7 +68,7 @@
             placeholder="Tell us what you liked and/or did not like"
           ></textarea>
         </div>
-        <button type="submit" class="btn">Submit Your feedback</button>  
+        <button type="submit" class="btn">Submit Your feedback</button>
       </form>
     </div>
   </body>

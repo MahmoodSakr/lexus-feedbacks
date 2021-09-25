@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail, Message
 
 app = Flask(__name__)  # app instance of the Flask
 
 # this var will play as a flag to switch between the development or production environment
 # ENV = 'dev'
-
 ENV = 'production'
 
 # setup the development configuration
@@ -20,9 +20,24 @@ else:
     # production db url
     app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://yyaebbsekdtvmv:5f6d6b474b9bfe108f0efe39c27442e485b95c0d153292558d2807cae63cbef2@ec2-34-228-154-153.compute-1.amazonaws.com:5432/d40duk0nb1e0lp"
 
+# setup mail credentials
+sender = "sakrservices2020@gmail.com"
+password = "a000000*"
+
+# update app with mail configuration
+app.config.update(
+    DEBUG=True,
+    # Email Setting
+    MAIL_SERVER="smtp.gmail.com",
+    MAIL_PORT="465",
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME=sender,
+    MAIL_PASSWORD=password
+)
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-#Integrate SQLAlchemy layer with the Flask app to control your db with it
+# Integrate SQLAlchemy layer with the Flask app to control your db with it
 db = SQLAlchemy(app)
 """ 
 db = SQLAlchemy()
@@ -30,6 +45,7 @@ db.init_app(app)
 """
 
 # create the db model through an oop class to define the schema of your feedbacks table
+
 
 class Feedback(db.Model):
     """sumary_line
@@ -51,9 +67,11 @@ class Feedback(db.Model):
         self.rating = rating
         self.comments = comments
 
+
 @app.route("/", methods=['get'])
 def index():
     return render_template('index.html')
+
 
 @app.route('/submit', methods=['post'])
 def submit():
@@ -76,16 +94,48 @@ def submit():
             db.session.add(newCustomer)
             db.session.commit()
             # send email with the feedback
-            # send_mail(customerName,dealerName,rating,comments)
+            sendMail(customerName, dealerName, rating, comments)
             print("new customer has been added with its feedback successfuly")
             return render_template('success.html',
-            message1="Thank you "+customerName, 
-            message2="Your feedback has been reached to us.")
+                                   message1="Thank you "+customerName,
+                                   message2="Your feedback has been reached to us.")
         else:
             print("an existing customer feedback has been added successfuly")
             return render_template("success.html",
-            message1="Thank you "+customerName, 
-            message2="Your feedback has been added to your previous feedbacks")
+                                   message1="Thank you "+customerName,
+                                   message2="Your feedback has been added to your previous feedbacks")
+
+# update app configuration
+app.config.update(
+    DEBUG=True,
+    # Email Setting
+    MAIL_SERVER="smtp.gmail.com",
+    MAIL_PORT="465",
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME=sender,
+    MAIL_PASSWORD=password
+)
+
+# instatiate the Mail class
+mail = Mail(app)
+
+def sendMail(customerName, dealerName, rating, comments):
+    sender = "sakrservices2020@gmail.com" 
+    recipients = ["ma7mouedsakr@gmail.com"]
+    subject = "New feedback from {}".format(customerName)
+    body = f'''Customer name : {customerName} \n
+    Deal Name : {dealerName} \n
+    Customer Rating : {rating}
+    Feedback : \n 
+    {comments}   '''
+    msg = Message(subject=subject,body=body, sender=sender, recipients=recipients)
+    # other mail option field you can edit it with msg.field=value;
+    # msg.add_recipient("mahmoudsakr@ci.menofia.edu.eg")
+    # msg.html = body_html
+    # with app.open_resource("myphoto.jpg") as fp:
+    #     msg.attach("myphoto.jpg", "image/jpg", fp.read())
+    mail.send(msg)
+
 
 if __name__ == '__main__':
     app.run()
